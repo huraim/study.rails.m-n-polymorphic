@@ -3,8 +3,17 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   get '/' => 'home#index'
-  get '/write' => 'home#write'
-  post '/create' => 'home#create'
+
+  post '/category_update/:category_id' => 'home#category_update'
+  get '/category_modify/:category_id' => 'home#category_modify'
+  get '/category_delete/:category_id' => 'home#category_delete'
+  get '/category_show/:category_id' => 'home#category_show'
+  get '/category_write' => 'home#category_write'
+  post '/category_create' => 'home#category_create'
+
+
+  get '/write/:category_id' => 'home#write'
+  post '/create/:category_id' => 'home#create'
   
   get '/modify/:post_id' => 'home#modify'
   post '/update/:post_id' => 'home#update'

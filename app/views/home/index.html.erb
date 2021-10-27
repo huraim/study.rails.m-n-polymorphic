@@ -3,84 +3,34 @@
   내 정보<br><br>
   아이디: <%= current_user.id %><br>
   이메일: <%= current_user.email %><br><br>
+  <% if current_user.is_admin == true %>
+    <p style="color: #f00">'블로그 주인장'</p>
+  <% end %>
   <a href="/users/sign_out" data-method="delete">로그아웃</a>
   </div>
 
   <hr>
 
-  <% @posts.each do |post| %>
-    <% unless current_user.id != post.user_id && post.is_privacy == false %>
-      게시글 작성자: <%= post.user.email %><br>
-      제목: <%= post.title %><br>
-      내용: <%= post.content %><br><br>
-
-      <% if current_user.id == post.user_id %> <!-- 본인 게시물만 -->
-        <a href="/modify/<%= post.id %>">수정하기</a>
-        <a href="/delete/<%= post.id %>">삭제하기</a>
-        <% if post.is_privacy == true %>
-          <a href="/privacy_update/<%= post.id %>">비공개</a>
-        <% elsif post.is_privacy == false %>
-          <a href="/privacy_update/<%= post.id %>">공개</a>
-        <% end %>
-      <% end %>
-      
-      
-      <div style="background-color:#ccc;">
-      총 <%= post.replies.count %>개의 댓글
-      <hr>
-      <% post.replies.each do |reply| %>
-
-        <div style="background-color:#ccc;">
-          댓글 작성자: <%= reply.user.email %><br>
-          댓글: <%= reply.content %>
-          <% if reply.user.id == current_user.id %> <!-- 본인 댓글만 -->
-            <a href="/reply_modify_form/<%= reply.id %>">수정</a>
-            <a href="/reply_delete/<%= reply.id %>">삭제</a>
-          <% end %>
-          <hr>
-        </div>
-
-
-      <% end %>
-
-      <form action="/reply_create/<%= post.id %>" method="post" style="background-color:#ccc;">
-
-        <textarea name="content" placeholder="댓글 작성하기"></textarea>
-        <input type="submit" value="댓글 쓰기">
-      
-      </form>
-      </div>
-
-
-      <hr>
+  <% @categories.each do |category| %>
+    <a href="/category_show/<%= category.id %>"><%= category.title %></a>
+    <% if current_user.is_admin == true %>
+      <a href="/category_delete/<%= category.id %>">삭제</a>
+      <a href="/category_modify/<%= category.id %>">수정</a>
     <% end %>
+    <hr>
   <% end %>
+  <a href="/category_write">카테고리 만들기</a><br>
 
-  <a href="/write">글 쓰기</a>
-
+  
 <% else %>
   <a href="/users/sign_in">로그인</a>
   <hr>
 
-  <% @posts.each do |post| %>
-    <% if post.is_privacy == true %>
-      게시글 작성자: <%= post.user.email %><br>
-      제목: <%= post.title %><br>
-      내용: <%= post.content %><br><br>
-
-      <div style="background-color:#ccc;">
-      <%= post.replies.count %>개의 댓글
-      <hr>
-      <% post.replies.each do |reply| %>
-        <div style="background-color:#ccc;">
-          댓글 작성자: <%= reply.user.email %><br>
-          댓글: <%= reply.content %>
-        </div>
-        <hr>
-      <% end %>
-      </div>
-      <hr>
-    <% end %>
+  <% @categories.each do |category| %>
+    <a href="/category_show/<%= category.id %>">
+      <%= category.title %>
+    </a>
+    <hr>
   <% end %>
 
 <% end %>

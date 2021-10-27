@@ -1,0 +1,69 @@
+<% if user_signed_in? %>
+
+  <% @category.posts.each do |post| %>
+    게시글 작성자: <%= post.user.email %><br>
+    제목: <%= post.title %><br>
+    내용: <%= post.content %><br><br>
+
+    <% if current_user.is_admin == true %> <!-- 블로그 주인장만 -->
+      <a href="/modify/<%= post.id %>">수정하기</a>
+      <a href="/delete/<%= post.id %>">삭제하기</a>
+    <% end %>
+    
+    
+    <div style="background-color:#ccc;">
+    총 <%= post.replies.count %>개의 댓글
+    <hr>
+    <% post.replies.each do |reply| %>
+
+      <div style="background-color:#ccc;">
+        댓글 작성자: <%= reply.user.email %><br>
+        댓글: <%= reply.content %>
+        <% if current_user.is_admin == true %> <!-- 본인 댓글만 -->
+          <a href="/reply_modify_form/<%= reply.id %>">수정</a>
+          <a href="/reply_delete/<%= reply.id %>">삭제</a>
+        <% end %>
+        <hr>
+      </div>
+
+
+    <% end %>
+
+    <form action="/reply_create/<%= post.id %>" method="post" style="background-color:#ccc;">
+
+      <textarea name="content" placeholder="댓글 작성하기"></textarea>
+      <input type="submit" value="댓글 쓰기">
+    
+    </form>
+    </div>
+
+
+    <hr>
+  <% end %>
+
+  <% if current_user.is_admin == true %> <!-- 블로그 주인장만 -->
+    <a href="/write/<%= @category.id%>">글 쓰기</a><br>
+  <% end %>
+
+<% else %>
+
+  <% @category.posts.each do |post| %>
+    게시글 작성자: <%= post.user.email %><br>
+    제목: <%= post.title %><br>
+    내용: <%= post.content %><br><br>
+
+    <div style="background-color:#ccc;">
+    <%= post.replies.count %>개의 댓글
+    <hr>
+    <% post.replies.each do |reply| %>
+      <div style="background-color:#ccc;">
+        댓글 작성자: <%= reply.user.email %><br>
+        댓글: <%= reply.content %>
+      </div>
+      <hr>
+    <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<a href="/">카테고리 목록</a>

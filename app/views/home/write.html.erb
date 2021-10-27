@@ -1,4 +1,4 @@
-<form action="/create" method="post">
+<form action="/create/<%= @category.id %>" method="post">
 
   제목: <input type="text" name="title" /><br>
   내용: <textarea name="content"></textarea><br>
@@ -7,4 +7,4 @@
 </form>
 <hr>
 
-<a href="/">뒤로가기</a>
+<a href="/category_show/<%= @category.id %>">뒤로가기</a>
